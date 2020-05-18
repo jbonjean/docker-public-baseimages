@@ -1,0 +1,26 @@
+name: Build Images
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Docker Tag
+        id: get_version
+        run: echo ::set-output name=TAG::$(echo $GITHUB_REF | cut -d / -f3)
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u jbonjean --password-stdin
+
+      - name: Build Docker images
+        shell: bash
+        env:
+          DOCKER_TAG: ${{ steps.get_version.outputs.TAG }}
+        run: ./build-images.sh
