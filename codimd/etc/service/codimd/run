@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+. /usr/lib/runit-lib
+
+export NODE_ENV='production'
+cd /opt/codimd
+exec /usr/sbin/gosu codimd node app.js

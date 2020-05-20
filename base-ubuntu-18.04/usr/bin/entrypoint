@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+mkdir -p /var/lock /var/log /var/run
+
+for script in $(find /etc/startup/ -type f -type f -name '[0-9][0-9]-*' | sort -n); do
+	echo "loading $(basename $script)"
+        . ${script}
+done
+
+export >> /dev/shm/environment
+
+if [ -z "$*" ]; then
+	exec /usr/bin/s6-svscan -s /etc/service
+else
+	/usr/bin/s6-svscan -s /etc/service > /var/log/runit.log 2>&1 &
+	exec $*
+fi

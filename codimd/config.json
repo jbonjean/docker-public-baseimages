@@ -1,0 +1,13 @@
+{
+	"production": {
+		"urlAddPort": true,
+		"useCDN": false,
+		"allowAnonymous": false,
+		"email": true,
+		"db": {
+			"dialect": "sqlite",
+			"storage": "/data/db.codimd.sqlite"
+		},
+		"imageUploadType": "filesystem"
+	}
+}
