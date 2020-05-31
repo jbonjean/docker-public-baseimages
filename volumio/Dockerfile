@@ -2,10 +2,10 @@ FROM jbonjean/base-nodejs-8 as builder
 
 RUN apt-get update && \
 	eatmydata apt-get install -y --no-install-recommends \
-		build-essential \
-		libavahi-compat-libdnssd-dev \
-		libudev-dev \
-		python \
+	build-essential \
+	libavahi-compat-libdnssd-dev \
+	libudev-dev \
+	python \
 	&& cleanup
 
 
@@ -17,7 +17,7 @@ ENV CORE_VERSION=a4e73ab3bab9527bb81808272661ed8bdf4b5586
 
 RUN mkdir -p /dist/volumio && \
 	curl -L https://github.com/volumio/Volumio2/archive/$CORE_VERSION.tar.gz | \
-		tar -C /dist/volumio --strip-components=1 -xz
+	tar -C /dist/volumio --strip-components=1 -xz
 
 # Remove fs-extra package that seems to cause issue on runtime. TBD.
 RUN sed -i '/"fs-extra"/d' /dist/volumio/package.json
@@ -35,7 +35,7 @@ ENV UI_VERSION=7ee27489248f389cf8b3f3421d9f9efd04a720bd
 
 RUN mkdir -p /tmp/volumio-ui && \
 	curl -L https://github.com/volumio/Volumio2-UI/archive/$UI_VERSION.tar.gz | \
-		tar -C /tmp/volumio-ui --strip-components=1 -xz
+	tar -C /tmp/volumio-ui --strip-components=1 -xz
 
 RUN cd /tmp/volumio-ui && \
 	eatmydata npm install && \
@@ -52,19 +52,18 @@ ARG DOCKER_TAG=latest
 
 RUN apt-get update && \
 	eatmydata apt-get install -y --no-install-recommends \
-		alsa-utils \
-		avahi-daemon \
-		avahi-utils \
-		dbus \
-		libavahi-compat-libdnssd1 \
-		libnss-mdns \
-		minizip \
-		mpc \
-		mpd \
-		pulseaudio \
-		shairport-sync \
-		sudo \
-		wget \
+	alsa-utils \
+	avahi-daemon \
+	avahi-utils \
+	libavahi-compat-libdnssd1 \
+	libnss-mdns \
+	minizip \
+	mpc \
+	mpd \
+	pulseaudio \
+	shairport-sync \
+	sudo \
+	wget \
 	&& cleanup
 
 # Add specific user and group (hardcoded).
