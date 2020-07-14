@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+# Default signal handling script.
+signal="$(basename "$0")"
+echo "Received signal $signal"
+
+# Execute shutdown hooks.
+# We add a lock here so the parts can never be run in parallel if multiple
+# signals are received. We also use a non-blocking lock with no error so the
+# run-parts is basically skipped if as second signal is received, which should
+# only happen if a user is using ctrl-c to quickly stop the container.
+if [ -d "/usr/lib/s6/shutdown.d" ]; then
+	[ -d "/var/lock" ] || mkdir -p /var/lock/
+	flock --exclusive --nonblock --conflict-exit-code 0 /var/lock/s6-shutdown.lock \
+		run-parts --exit-on-error --verbose --regex '^[0-9]' --arg "$signal" /usr/lib/s6/shutdown.d
+fi
+
+# Triggers s6-svscan shutdown.
+s6-svscanctl -st /etc/service

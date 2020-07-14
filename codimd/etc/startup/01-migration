@@ -6,11 +6,10 @@ run_migration() {
 	NODE_ENV=production /opt/codimd/node_modules/.bin/sequelize db:migrate
 }
 
-
 mkdir -p /data /opt/codimd/public/uploads
 chown codimd:codimd /data /opt/codimd/public/uploads
 
-if [ -f /data/db.codimd.sqlite -a "${HMD_MIGRATE:-}" = "1" ]; then
+if [ -f /data/db.codimd.sqlite -a "${CMD_MIGRATE:-}" = "1" ]; then
 	cp -a /data/db.codimd.sqlite /data/db.codimd.sqlite.bak
 	run_migration
 	rm -f /data/db.codimd.sqlite.bak

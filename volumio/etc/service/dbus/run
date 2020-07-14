@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+
+exec dbus-daemon --nofork --config-file /usr/share/dbus-1/system.conf

@@ -13,17 +13,21 @@ RUN apt-get update && \
 # Build Volumio Core.
 FROM builder as core-builder
 
-ENV CORE_VERSION=a4e73ab3bab9527bb81808272661ed8bdf4b5586
+ENV CORE_VERSION=1618d0cc443408164e84bcef7b3decb3ca53665c
+ENV SHA256=477ed44b0e84d05bd68f0cea24a712fa872446840dcd7d7422e84f28c7f7d119
 
-RUN mkdir -p /dist/volumio && \
-	curl -L https://github.com/volumio/Volumio2/archive/$CORE_VERSION.tar.gz | \
-	tar -C /dist/volumio --strip-components=1 -xz
+RUN curl -Lo /tmp/volumio.tar.gz "https://github.com/volumio/Volumio2/archive/$CORE_VERSION.tar.gz" && \
+	sha256sum /tmp/volumio.tar.gz && \
+	echo "$SHA256 /tmp/volumio.tar.gz" | sha256sum --check --status && \
+	mkdir -p /dist/volumio && \
+	tar -C /dist/volumio --strip-components=1 -xf /tmp/volumio.tar.gz && \
+	rm -f /tmp/volumio.tar.gz
 
 # Remove fs-extra package that seems to cause issue on runtime. TBD.
 RUN sed -i '/"fs-extra"/d' /dist/volumio/package.json
 
 RUN cd /dist/volumio && \
-	eatmydata npm install && \
+	eatmydata npm install --production && \
 	eatmydata node /dist/volumio/utils/misc/clean-node-modules.js /dist/volumio
 
 
@@ -31,14 +35,19 @@ RUN cd /dist/volumio && \
 # Build Volumio UI.
 FROM builder as ui-builder
 
-ENV UI_VERSION=7ee27489248f389cf8b3f3421d9f9efd04a720bd
+ENV UI_VERSION=5bab44b1de8ee770ea9935a84fada289e87f3443
+ENV SHA256=6f2d54d497ec5eab98dda699ec0cc14ba9c1d3e297ee5728527fe9a7bcde6cf5
 
-RUN mkdir -p /tmp/volumio-ui && \
-	curl -L https://github.com/volumio/Volumio2-UI/archive/$UI_VERSION.tar.gz | \
-	tar -C /tmp/volumio-ui --strip-components=1 -xz
+RUN curl -Lo /tmp/volumio-ui.tar.gz "https://github.com/volumio/Volumio2-UI/archive/$UI_VERSION.tar.gz" && \
+	sha256sum /tmp/volumio-ui.tar.gz && \
+	echo "$SHA256 /tmp/volumio-ui.tar.gz" | sha256sum --check --status && \
+	mkdir -p /tmp/volumio-ui && \
+	tar -C /tmp/volumio-ui --strip-components=1 -xf /tmp/volumio-ui.tar.gz && \
+	rm -f /tmp/volumio-ui.tar.gz
 
 RUN cd /tmp/volumio-ui && \
 	eatmydata npm install && \
+	eatmydata npm install -g bower gulp && \
 	eatmydata bower install --allow-root && \
 	eatmydata gulp build --theme="volumio" --env="production" && \
 	mkdir -p /dist && mv /tmp/volumio-ui/dist /dist/volumio

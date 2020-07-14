@@ -1,0 +1,50 @@
+#!/bin/sh
+set -eu
+S6_KILL_GRACETIME="${S6_KILL_GRACETIME:-5}"
+
+if [ "$S6_KILL_GRACETIME" -le "0" ]; then
+	echo "Shutting down"
+	exit 0
+fi
+
+# Waiting for services to stop.
+
+# shellcheck disable=SC2004
+GRACEFUL_SHUTDOWN_TIMEOUT=$(($(date '+%s')+${S6_KILL_GRACETIME}))
+
+# Delay before entering the loop, to have more chances to succeed on the first
+# iteration.
+sleep 0.2
+
+while true; do
+	ALL_DOWN=true
+
+	# Check if the services are stopped.
+	# shellcheck disable=SC2045
+	for SERVICE_DIR in $(ls -d /etc/service/*/); do
+
+		# Skip if the service directory is currently not supervised.
+		if ! s6-svok "${SERVICE_DIR}" >/dev/null 2>&1; then
+			continue
+		fi
+
+		# Check if the service is reported as 'up'.
+		if [ "$(s6-svstat -o up "${SERVICE_DIR}" 2>/dev/null)" = "true" ]; then
+			echo "Service $(basename "${SERVICE_DIR}") still running"
+			ALL_DOWN=false
+		fi
+	done
+
+	# All services down, we can stop.
+	if ${ALL_DOWN}; then
+		echo "All services are down"
+		break
+	fi
+
+	# Some services didn't not stop in the given delay, we give up.
+	if [ "${GRACEFUL_SHUTDOWN_TIMEOUT}" -le "$(date '+%s')" ]; then
+		echo "Graceful shutdown reached timeout, giving up"
+		break
+	fi
+done
+echo "Shutting down"

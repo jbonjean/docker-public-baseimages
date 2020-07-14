@@ -1,11 +1,11 @@
-From 4250797ae5e4bed53cad777b4e570f13d211f17f Mon Sep 17 00:00:00 2001
+From 31c12eec23bff66c3a92a57039c7052292d71e63 Mon Sep 17 00:00:00 2001
 From: Julien Bonjean <julien.bonjean@adenops.com>
-Date: Thu, 27 Feb 2020 11:07:51 -0500
+Date: Sun, 12 Jul 2020 20:27:09 -0400
 Subject: [PATCH] add notes list tab
 
 ---
  lib/response.js             |  56 +++++++++
- lib/web/noteRouter.js       |   2 +
+ lib/routes.js               |   2 +
  public/css/cover.css        |  16 +--
  public/js/cover.js          |   2 +
  public/js/notes.js          | 222 ++++++++++++++++++++++++++++++++++++
@@ -15,10 +15,10 @@ Subject: [PATCH] add notes list tab
  create mode 100644 public/js/notes.js
 
 diff --git a/lib/response.js b/lib/response.js
-index ce7e4fc..c31dc43 100644
+index 0de8f9bc..e83963db 100644
 --- a/lib/response.js
 +++ b/lib/response.js
-@@ -15,6 +15,10 @@ const logger = require('./logger')
+@@ -9,6 +9,10 @@ const logger = require('./logger')
  const models = require('./models')
  const utils = require('./utils')
  const history = require('./history')
@@ -28,16 +28,16 @@ index ce7e4fc..c31dc43 100644
 +var Op = Sequelize.Op
  
  // public
- exports.errorForbidden = errorForbidden
-@@ -23,6 +27,7 @@ exports.errorBadRequest = errorBadRequest
+ exports.responseError = responseError
+@@ -18,6 +22,7 @@ exports.errorBadRequest = errorBadRequest
  exports.errorTooLong = errorTooLong
  exports.errorInternalError = errorInternalError
  exports.errorServiceUnavailable = errorServiceUnavailable
 +exports.listNotes = listNotes
  exports.newNote = newNote
- exports.showNote = showNote
- exports.showPublishNote = showPublishNote
-@@ -118,6 +123,57 @@ function updateHistory (userId, note, document, time) {
+ exports.showPublishSlide = showPublishSlide
+ exports.publishNoteActions = publishNoteActions
+@@ -87,6 +92,57 @@ function updateHistory (userId, note, document, time) {
    logger.info('history updated')
  }
  
@@ -95,21 +95,21 @@ index ce7e4fc..c31dc43 100644
  function newNote (req, res, next) {
    var owner = null
    var body = ''
-diff --git a/lib/web/noteRouter.js b/lib/web/noteRouter.js
-index bac2cf8..8964ab4 100644
---- a/lib/web/noteRouter.js
-+++ b/lib/web/noteRouter.js
-@@ -8,6 +8,8 @@ const { markdownParser } = require('./utils')
- 
- const noteRouter = module.exports = Router()
+diff --git a/lib/routes.js b/lib/routes.js
+index f4345039..5a255166 100644
+--- a/lib/routes.js
++++ b/lib/routes.js
+@@ -58,6 +58,8 @@ appRouter.get('/user/:username/avatar.svg', userController.getMyAvatar)
+ // register image upload module
+ appRouter.use(require('./imageRouter'))
  
 +// get all notes
-+noteRouter.get('/list', response.listNotes)
++appRouter.get('/list', response.listNotes)
  // get new note
- noteRouter.get('/new', response.newNote)
+ appRouter.get('/new', response.newNote)
  // post new note with content
 diff --git a/public/css/cover.css b/public/css/cover.css
-index 4693c9c..96c5e93 100644
+index 4693c9c3..96c5e935 100644
 --- a/public/css/cover.css
 +++ b/public/css/cover.css
 @@ -279,17 +279,17 @@ input {
@@ -165,7 +165,7 @@ index 4693c9c..96c5e93 100644
      }
  }
 diff --git a/public/js/cover.js b/public/js/cover.js
-index 10111bf..a2bb491 100644
+index 10111bfa..a2bb4916 100644
 --- a/public/js/cover.js
 +++ b/public/js/cover.js
 @@ -75,6 +75,7 @@ function pageInit () {
@@ -186,7 +186,7 @@ index 10111bf..a2bb491 100644
    )
 diff --git a/public/js/notes.js b/public/js/notes.js
 new file mode 100644
-index 0000000..fb45906
+index 00000000..fb459068
 --- /dev/null
 +++ b/public/js/notes.js
 @@ -0,0 +1,222 @@
@@ -413,7 +413,7 @@ index 0000000..fb45906
 +
 +$('.search-notes').keyup(checkNoteList)
 diff --git a/public/views/index/body.ejs b/public/views/index/body.ejs
-index a5eb0b4..c12f8c4 100644
+index 7b520070..95b47f3a 100644
 --- a/public/views/index/body.ejs
 +++ b/public/views/index/body.ejs
 @@ -9,6 +9,8 @@
@@ -457,10 +457,10 @@ index a5eb0b4..c12f8c4 100644
                  <div class="ui-signin"<% if(signin) { %> style="display:none;"<% } %>>
                      <p><%= __('Below is the history from browser') %></p>
 diff --git a/webpack.common.js b/webpack.common.js
-index 2f4060d..206e928 100644
+index 6347fdb8..7064da06 100644
 --- a/webpack.common.js
 +++ b/webpack.common.js
-@@ -181,7 +181,8 @@ module.exports = {
+@@ -201,7 +201,8 @@ module.exports = {
      ],
      cover: [
        'babel-polyfill',
@@ -470,7 +470,7 @@ index 2f4060d..206e928 100644
      ],
      'cover-styles-pack': [
        path.join(__dirname, 'node_modules/bootstrap/dist/css/bootstrap.min.css'),
-@@ -195,7 +196,8 @@ module.exports = {
+@@ -215,7 +216,8 @@ module.exports = {
        'bootstrap-validator',
        'expose-loader?select2!select2',
        'expose-loader?moment!moment',
@@ -481,5 +481,5 @@ index 2f4060d..206e928 100644
      index: [
        'babel-polyfill',
 -- 
-2.25.0
+2.27.0
 
