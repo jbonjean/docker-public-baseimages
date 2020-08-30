@@ -12,12 +12,12 @@ fi
 # shellcheck disable=SC2004
 GRACEFUL_SHUTDOWN_TIMEOUT=$(($(date '+%s')+${S6_KILL_GRACETIME}))
 
-# Delay before entering the loop, to have more chances to succeed on the first
-# iteration.
-sleep 0.2
-
 while true; do
 	ALL_DOWN=true
+
+	# Apply the delay before, to have more chances to succeed on the first
+	# iteration.
+	sleep 0.2
 
 	# Check if the services are stopped.
 	# shellcheck disable=SC2045
