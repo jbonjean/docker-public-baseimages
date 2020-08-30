@@ -95,5 +95,5 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 
 # Custom prompt.
-PS1="\e[1;37m(docker) \u@\h:\w\\$ \e[m"
+PS1="(docker) \u@\h:\w\\$ "
 
