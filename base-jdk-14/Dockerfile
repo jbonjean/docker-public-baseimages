@@ -1,9 +1,9 @@
-FROM jbonjean/base-jre-8
+FROM jbonjean/base-jre-14
 
 RUN apt-get update && \
 	mkdir -p /usr/share/man/man1/ && \
-	eatmydata apt-get install -y --no-install-recommends openjdk-8-jdk && \
-	update-java-alternatives -s java-1.8.0-openjdk-amd64 && \
+	eatmydata apt-get install -y --no-install-recommends openjdk-14-jdk && \
+	update-java-alternatives -s java-1.14.0-openjdk-amd64 && \
 	rm -rf /usr/share/man/* && \
 	cleanup
 

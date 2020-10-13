@@ -9,7 +9,7 @@ echo '{"localhost": "'$HOST'"}' > /volumio/http/www/app/local-config.json
 
 # prepare data directory
 mkdir -p /data
-chown -R volumio:volumio /data
+chown volumio:volumio /data
 
 # prepare log files
 touch /var/log/volumio.log /var/log/albumart.log

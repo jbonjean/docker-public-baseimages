@@ -5,10 +5,12 @@ IMAGES="
 base-ubuntu-18.04
 base-ubuntu-20.04
 base-go
-base-jdk-8
 base-jre-8
-base-jdk-11
+base-jdk-8
 base-jre-11
+base-jdk-11
+base-jre-14
+base-jdk-14
 base-nodejs-6
 base-nodejs-8
 base-nodejs-10
