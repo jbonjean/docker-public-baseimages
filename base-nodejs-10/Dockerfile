@@ -1,6 +1,6 @@
 FROM jbonjean/base-ubuntu-20.04
 
-RUN export VERSION="10.22.1" SHA256="079d6329c7ba5da3e3fa0949b543e24e605daf985381b32ebd86df8d38f9afa6" && \
+RUN export VERSION="10.23.0" SHA256="3293b1ea9b9e08d9dbc5bb8717a80084e24cadfe3b030a8ebfdadea5f963dfc9" && \
 	curl -Lo /tmp/nodejs.tar.xz "https://nodejs.org/download/release/v$VERSION/node-v$VERSION-linux-x64.tar.xz" && \
 	sha256sum /tmp/nodejs.tar.xz && \
 	echo "$SHA256 /tmp/nodejs.tar.xz" | sha256sum --check --status && \
