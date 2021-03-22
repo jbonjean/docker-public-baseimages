@@ -11,8 +11,8 @@ done
 export >> /dev/shm/environment
 
 if [ -z "$*" ]; then
-	exec /usr/bin/s6-svscan -s /etc/service
+	exec /usr/bin/s6-svscan /etc/service
 else
-	/usr/bin/s6-svscan -s /etc/service > /var/log/runit.log 2>&1 &
+	/usr/bin/s6-svscan /etc/service > /var/log/runit.log 2>&1 &
 	exec $*
 fi

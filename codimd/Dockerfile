@@ -4,8 +4,8 @@ RUN apt-get update && \
 	eatmydata apt-get install -y --no-install-recommends build-essential git-core libssl-dev python && \
 	cleanup
 
-ENV VERSION=2.2.0
-ENV SHA256=4ffcdc416d32d2843d99760e2bfb869d8777724fbfe7d00d808f221cb09486f1
+ENV VERSION=2.3.2
+ENV SHA256=aa1134ed283aec23e99ae3557541e183f342031e6728d1045ec5c3b2d32b2e5f
 
 RUN curl -Lo /tmp/codimd.tar.gz "https://github.com/hackmdio/codimd/archive/$VERSION.tar.gz" && \
 	sha256sum /tmp/codimd.tar.gz && \

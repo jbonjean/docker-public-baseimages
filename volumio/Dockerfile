@@ -13,8 +13,8 @@ RUN apt-get update && \
 # Build Volumio Core.
 FROM builder as core-builder
 
-ENV CORE_VERSION=03f7bbd984817e093cac62b7ff876f3c2cfabc1d
-ENV SHA256=1e0425f88021b2c96a9690790d9919a1e70a20c7d05fe403eff701ab61f0802c
+ENV CORE_VERSION=85a076a5a4334c69098e9e107b3ff45aa117d542
+ENV SHA256=bf1223644aadec53f17bd29cb21dfd39e86adbf736b8286c1b616d6a09d5b877
 
 RUN curl -Lo /tmp/volumio.tar.gz "https://github.com/volumio/Volumio2/archive/$CORE_VERSION.tar.gz" && \
 	sha256sum /tmp/volumio.tar.gz && \
@@ -35,8 +35,8 @@ RUN cd /dist/volumio && \
 # Build Volumio UI.
 FROM builder as ui-builder
 
-ENV UI_VERSION=91e20076873bd0f06869aa23e1cd86586a899dc6
-ENV SHA256=5c4f78d9477caad40f70dfb2b06d18db2fbeab18475cdb38a64aa16a55b999aa
+ENV UI_VERSION=2e630c6f51e216b2199a80902af0cb7d7fc6824b
+ENV SHA256=99147e5443f25fd2d85bcec6c5e7b54bd0bd937ce05069a3fd794fee4b3e82a0
 
 RUN curl -Lo /tmp/volumio-ui.tar.gz "https://github.com/volumio/Volumio2-UI/archive/$UI_VERSION.tar.gz" && \
 	sha256sum /tmp/volumio-ui.tar.gz && \
