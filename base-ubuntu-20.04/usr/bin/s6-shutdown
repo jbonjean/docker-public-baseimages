@@ -17,4 +17,4 @@ if [ -d "/usr/lib/s6/shutdown.d" ]; then
 fi
 
 # Triggers s6-svscan shutdown.
-s6-svscanctl -st /etc/service
+s6-svscanctl -t /etc/service
