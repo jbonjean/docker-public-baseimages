@@ -1,6 +1,6 @@
 # STAGE 1: build s6
 
-FROM ubuntu:bionic-20210222 as s6-builder
+FROM ubuntu:bionic-20210416 as s6-builder
 
 RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/disable-fsync && \
 	apt-get update && \
@@ -18,7 +18,7 @@ RUN DIST_DIR=/dist /tmp/build-s6
 
 # STAGE 2: build image
 
-FROM ubuntu:bionic-20210222
+FROM ubuntu:bionic-20210416
 
 ENV DEBIAN_FRONTEND=noninteractive LANG=en_US.UTF-8 TERM=xterm
 
