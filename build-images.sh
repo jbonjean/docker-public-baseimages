@@ -14,7 +14,6 @@ base-jdk-14
 base-nodejs-6
 base-nodejs-8
 base-nodejs-10
-codimd
 volumio
 "
 
