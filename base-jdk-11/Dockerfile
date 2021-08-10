@@ -8,7 +8,7 @@ RUN apt-get update && \
 	cleanup
 
 # Manually install Maven, to be consistent with other JDK base images.
-RUN export VERSION="3.6.3" SHA256="26ad91d751b3a9a53087aefa743f4e16a17741d3915b219cf74112bf87a438c5" && \
+RUN export VERSION="3.8.1" SHA256="b98a1905eb554d07427b2e5509ff09bd53e2f1dd7a0afa38384968b113abef02" && \
 	curl -Lo /tmp/maven.tar.gz "https://httpd-mirror.sergal.org/apache/maven/maven-3/$VERSION/binaries/apache-maven-$VERSION-bin.tar.gz" && \
 	sha256sum /tmp/maven.tar.gz && \
 	echo "$SHA256 /tmp/maven.tar.gz" | sha256sum --check --status && \

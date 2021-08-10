@@ -1,5 +1,0 @@
-#!/bin/sh
-set -eu
-. /usr/lib/runit-lib
-
-exec s6-envuidgid nobody socklog unix /dev/log
