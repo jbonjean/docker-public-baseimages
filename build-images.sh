@@ -8,8 +8,8 @@ base-jre-8
 base-jdk-8
 base-jre-11
 base-jdk-11
-base-jre-14
-base-jdk-14
+base-jre-17
+base-jdk-17
 base-nodejs-8
 base-nodejs-10
 base-nodejs-14
