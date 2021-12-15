@@ -13,7 +13,6 @@ base-jdk-17
 base-nodejs-8
 base-nodejs-10
 base-nodejs-14
-volumio
 "
 
 DOCKER_TAG="${DOCKER_TAG:-master}"
