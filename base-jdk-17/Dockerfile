@@ -7,11 +7,11 @@ RUN apt-get update && \
 	rm -rf /usr/share/man/* && \
 	cleanup
 
-# Manually install Maven, to avoid pulling jre-11 dependency.
-RUN export VERSION="3.8.1" SHA256="b98a1905eb554d07427b2e5509ff09bd53e2f1dd7a0afa38384968b113abef02" && \
-	curl -Lo /tmp/maven.tar.gz "https://httpd-mirror.sergal.org/apache/maven/maven-3/$VERSION/binaries/apache-maven-$VERSION-bin.tar.gz" && \
-	sha256sum /tmp/maven.tar.gz && \
-	echo "$SHA256 /tmp/maven.tar.gz" | sha256sum --check --status && \
+# Manually install Maven.
+RUN export VERSION="3.8.4" && \
+	curl -Lo /tmp/maven.tar.gz "https://dlcdn.apache.org/maven/maven-3/$VERSION/binaries/apache-maven-$VERSION-bin.tar.gz" && \
+	SHA512="$(curl -sL "https://downloads.apache.org/maven/maven-3/$VERSION/binaries/apache-maven-$VERSION-bin.tar.gz.sha512")" && \
+	echo "$SHA512 /tmp/maven.tar.gz" | sha512sum --check --status && \
 	mkdir -p /opt/maven && \
 	tar --strip-components 1 -C /opt/maven -xf /tmp/maven.tar.gz && \
 	rm -f /tmp/maven.tar.gz

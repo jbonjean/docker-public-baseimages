@@ -1,11 +1,8 @@
 FROM jbonjean/base-ubuntu-20.04
 
-ENV GOPATH=/go GOROOT=/opt/go PATH=/opt/go/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/bin:/bin
+ENV PATH=/opt/go/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/bin:/bin
 
-RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
-WORKDIR $GOPATH
-
-RUN export VERSION="1.17.1" SHA256="dab7d9c34361dc21ec237d584590d72500652e7c909bf082758fb63064fca0ef" && \
+RUN export VERSION="1.17.5" SHA256="bd78114b0d441b029c8fe0341f4910370925a4d270a6a590668840675b0c653e" && \
 	curl -Lo /tmp/golang.tar.gz "https://storage.googleapis.com/golang/go$VERSION.linux-amd64.tar.gz" && \
 	echo "$SHA256 /tmp/golang.tar.gz" | sha256sum --check --status && \
 	mkdir -p /opt/go && \
