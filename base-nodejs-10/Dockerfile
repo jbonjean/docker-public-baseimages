@@ -1,4 +1,4 @@
-FROM jbonjean/base-ubuntu-20.04
+FROM jbonjean/base-ubuntu-22.04
 
 RUN export VERSION="10.24.1" SHA256="a3b9b97c23bcdc64334be6b02422e9014f040d59dcf604563ffda48003419356" && \
 	curl -Lo /tmp/nodejs.tar.xz "https://nodejs.org/download/release/v$VERSION/node-v$VERSION-linux-x64.tar.xz" && \

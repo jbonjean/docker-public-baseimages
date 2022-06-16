@@ -1,4 +1,4 @@
-FROM jbonjean/base-ubuntu-20.04
+FROM jbonjean/base-ubuntu-22.04
 
 RUN apt-get update && \
 	mkdir -p /usr/share/man/man1/ && \
