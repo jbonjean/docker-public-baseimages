@@ -8,7 +8,7 @@ RUN apt-get update && \
 	cleanup
 
 # Manually install Maven.
-RUN export VERSION="3.8.6" && \
+RUN export VERSION="3.9.2" && \
 	curl -Lo /tmp/maven.tar.gz "https://dlcdn.apache.org/maven/maven-3/$VERSION/binaries/apache-maven-$VERSION-bin.tar.gz" && \
 	SHA512="$(curl -sL "https://downloads.apache.org/maven/maven-3/$VERSION/binaries/apache-maven-$VERSION-bin.tar.gz.sha512")" && \
 	echo "$SHA512 /tmp/maven.tar.gz" | sha512sum --check --status && \

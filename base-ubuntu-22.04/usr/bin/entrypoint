@@ -21,6 +21,5 @@ done
 if [ -z "$*" ]; then
 	exec /usr/bin/s6-svscan /etc/service
 else
-	/usr/bin/s6-svscan /etc/service > /var/log/runit.log 2>&1 &
 	exec $*
 fi

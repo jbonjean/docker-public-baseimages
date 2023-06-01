@@ -4,7 +4,7 @@ set -eu
 # Wrapper for s6-svc that emulates runit sv behavior.
 
 SERVICES_DIR="/etc/service"
-TIMEOUT=5000
+TIMEOUT=${TIMEOUT:-5000}
 
 ACTION="${1:-}"
 SERVICE="${2:-}"
@@ -33,12 +33,18 @@ case "${ACTION}" in
 	up|start)
 		s6-svc -wu -T "${TIMEOUT}" -u "${SERVICES_DIR}/${SERVICE}"
 		;;
-	down|stop|shutdown|force-stop|force-shutdown|exit)
+	down|stop|shutdown)
 		s6-svc -wd -T "${TIMEOUT}" -d "${SERVICES_DIR}/${SERVICE}"
+		;;
+	force-stop|force-shutdown)
+		if ! s6-svc -wd -T "${TIMEOUT}" -d "${SERVICES_DIR}/${SERVICE}"; then
+			# Reached timeout when waiting for process to stop, kill it.
+			s6-svc -k "${SERVICES_DIR}/${SERVICE}"
+		fi
 		;;
 	restart|force-restart)
 		if ! s6-svc -wD -T "${TIMEOUT}" -d "${SERVICES_DIR}/${SERVICE}"; then
-			# reached timeout when waiting for process to ready for a new start, kill it
+			# Reached timeout when waiting for process to ready for a new start, kill it.
 			s6-svc -k "${SERVICES_DIR}/${SERVICE}" || true
 		fi
 		s6-svc -wu -T "${TIMEOUT}" -u "${SERVICES_DIR}/${SERVICE}"
