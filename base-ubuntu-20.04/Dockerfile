@@ -1,6 +1,6 @@
 # STAGE 1: build s6
 
-FROM ubuntu:focal-20231128 as s6-builder
+FROM ubuntu:focal as s6-builder
 
 RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/disable-fsync && \
 	apt-get update && \
@@ -18,7 +18,7 @@ RUN DIST_DIR=/dist /tmp/build-s6
 
 # STAGE 2: build image
 
-FROM ubuntu:focal-20231128
+FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND=noninteractive LANG=en_US.UTF-8 TERM=xterm
 

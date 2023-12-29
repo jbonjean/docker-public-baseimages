@@ -12,6 +12,9 @@ base-nodejs-14
 
 DOCKER_TAG="${DOCKER_TAG:-master}"
 
+docker pull ubuntu:focal
+docker pull ubuntu:jammy
+
 # Build images.
 for image in $IMAGES; do
 	echo "Building jbonjean/$image"
