@@ -2,10 +2,10 @@
 set -eu
 
 # https://github.com/skarnet/s6/releases
-S6_VERSION="2.12.0.2"
-# https://github.com/skarnet/s6/blob/v2.12.0.2/doc/upgrade.html
-SKALIBS_VERSION="2.14.0.0"
-EXECLINE_VERSION="2.9.4.0"
+S6_VERSION="2.12.0.4"
+# https://github.com/skarnet/s6/blob/v2.12.0.4/doc/upgrade.html
+SKALIBS_VERSION="2.14.1.1"
+EXECLINE_VERSION="2.9.5.0"
 
 CONFIGURE_OPTS="--prefix=/usr --libdir=/usr/lib --enable-static --disable-shared"
 
