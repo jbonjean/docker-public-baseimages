@@ -1,9 +1,9 @@
-FROM jbonjean/base-jre-17
+FROM jbonjean/base-jre-21
 
 RUN apt-get update && \
 	mkdir -p /usr/share/man/man1/ && \
-	eatmydata apt-get install -y --no-install-recommends openjdk-17-jdk && \
-	update-java-alternatives -s java-1.17.0-openjdk-amd64 && \
+	eatmydata apt-get install -y --no-install-recommends openjdk-21-jdk && \
+	update-java-alternatives -s java-1.21.0-openjdk-amd64 && \
 	rm -rf /usr/share/man/* && \
 	cleanup
 

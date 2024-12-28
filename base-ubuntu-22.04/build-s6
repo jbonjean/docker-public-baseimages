@@ -2,10 +2,10 @@
 set -eu
 
 # https://github.com/skarnet/s6/releases
-S6_VERSION="2.12.0.4"
-# https://github.com/skarnet/s6/blob/v2.12.0.4/doc/upgrade.html
-SKALIBS_VERSION="2.14.1.1"
-EXECLINE_VERSION="2.9.5.0"
+S6_VERSION="2.13.1.0"
+# https://github.com/skarnet/s6/blob/v2.13.1.0/doc/upgrade.html
+SKALIBS_VERSION="2.14.3.0"
+EXECLINE_VERSION="2.9.6.1"
 
 CONFIGURE_OPTS="--prefix=/usr --libdir=/usr/lib --enable-static --disable-shared"
 
@@ -17,7 +17,7 @@ mkdir -p "${WORK_DIR}"
 # Switch working directory.
 cd "$(dirname "${0}")"
 
-# Build skalibs.
+echo "Building skalibs"
 curl -L "https://github.com/skarnet/skalibs/archive/v${SKALIBS_VERSION}.tar.gz" | tar -xz
 cd "skalibs-${SKALIBS_VERSION}"
 # shellcheck disable=SC2086
@@ -26,7 +26,7 @@ make
 make DESTDIR="${WORK_DIR}" install
 cd -
 
-# Build execline.
+echo "Building execline"
 curl -L "https://github.com/skarnet/execline/archive/v${EXECLINE_VERSION}.tar.gz" | tar -xz
 cd "execline-${EXECLINE_VERSION}"
 # shellcheck disable=SC2086
@@ -38,7 +38,7 @@ make
 make DESTDIR="${WORK_DIR}" install
 cd -
 
-# Build s6.
+echo "Building s6"
 curl -L "https://github.com/skarnet/s6/archive/v${S6_VERSION}.tar.gz" | tar -xz
 cd "s6-${S6_VERSION}"
 # shellcheck disable=SC2086

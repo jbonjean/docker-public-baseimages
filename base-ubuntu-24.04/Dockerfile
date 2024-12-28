@@ -1,6 +1,6 @@
 # STAGE 1: build s6
 
-FROM ubuntu:jammy AS s6-builder
+FROM ubuntu:noble AS s6-builder
 
 RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/disable-fsync && \
 	apt-get update && \
@@ -18,12 +18,12 @@ RUN DIST_DIR=/dist /tmp/build-s6
 
 # STAGE 2: build image
 
-FROM ubuntu:jammy
+FROM ubuntu:noble
 
 ENV DEBIAN_FRONTEND=noninteractive LANG=en_US.UTF-8 TERM=xterm
 
-RUN echo 'deb http://archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse' > /etc/apt/sources.list && \
-	echo 'deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse' >> /etc/apt/sources.list && \
+RUN echo 'deb http://archive.ubuntu.com/ubuntu/ noble main restricted universe multiverse' > /etc/apt/sources.list && \
+	echo 'deb http://archive.ubuntu.com/ubuntu/ noble-updates main restricted universe multiverse' >> /etc/apt/sources.list && \
 	echo 'path-exclude=/usr/share/man/*' > /etc/dpkg/dpkg.cfg.d/docker-no-doc && \
 	echo 'path-exclude=/usr/share/doc/*' >> /etc/dpkg/dpkg.cfg.d/docker-no-doc && \
 	echo 'path-exclude=/usr/share/locale/*' >> /etc/dpkg/dpkg.cfg.d/docker-no-doc && \

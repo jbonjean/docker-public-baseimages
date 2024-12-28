@@ -1,6 +1,6 @@
 # STAGE 1: build s6
 
-FROM ubuntu:focal as s6-builder
+FROM ubuntu:focal AS s6-builder
 
 RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/disable-fsync && \
 	apt-get update && \
