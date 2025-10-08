@@ -1,23 +1,3 @@
-# STAGE 1: build s6
-
-FROM ubuntu:noble AS s6-builder
-
-RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/disable-fsync && \
-	apt-get update && \
-	apt-get install -y eatmydata && \
-	dpkg -L eatmydata libeatmydata1 | grep 'libeatmydata.so$' > /etc/ld.so.preload && \
-	eatmydata apt-get install -y autoconf automake build-essential curl git-core patch wget && \
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-	rm -f rm -f /var/cache/debconf/config.dat-old /var/cache/debconf/templates.dat-old && \
-	find /var/log -type f -delete
-
-COPY build-s6 /tmp/
-RUN DIST_DIR=/dist /tmp/build-s6
-
-
-# STAGE 2: build image
-
 FROM ubuntu:noble
 
 ENV DEBIAN_FRONTEND=noninteractive LANG=en_US.UTF-8 TERM=xterm
@@ -55,6 +35,7 @@ RUN \
 	patch \
 	procps \
 	rsync \
+	s6 \
 	socat \
 	socklog \
 	software-properties-common \
@@ -77,8 +58,6 @@ RUN \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 	rm -f rm -f /var/cache/debconf/config.dat-old /var/cache/debconf/templates.dat-old && \
 	find /var/log -type f -delete
-
-COPY --from=s6-builder /dist /
 
 RUN mkdir -p /usr/lib/s6/shutdown.d /etc/service/.s6-svscan && \
 	for signal in SIGINT SIGHUP SIGTERM SIGQUIT SIGUSR1 SIGUSR2; \

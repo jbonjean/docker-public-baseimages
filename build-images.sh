@@ -2,21 +2,15 @@
 set -eu
 
 IMAGES="
-base-ubuntu-20.04
-base-ubuntu-22.04
 base-ubuntu-24.04
-base-jre-17
-base-jdk-17
 base-jre-21
 base-jdk-21
-base-nodejs-10
 base-nodejs-14
 "
 
 DOCKER_TAG="${DOCKER_TAG:-master}"
 
-docker pull ubuntu:focal
-docker pull ubuntu:jammy
+docker pull ubuntu:noble
 
 # Build images.
 for image in $IMAGES; do
