@@ -3,8 +3,8 @@ set -eu
 
 IMAGES="
 base-ubuntu-24.04
-base-jre-21
-base-jdk-21
+base-jre-25
+base-jdk-25
 base-nodejs-14
 "
 
