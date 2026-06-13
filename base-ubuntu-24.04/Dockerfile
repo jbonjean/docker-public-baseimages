@@ -43,16 +43,14 @@ RUN \
 	sysstat \
 	tcpdump \
 	telnet \
+	tini \
 	unzip \
 	vim \
 	whois \
 	zip \
 	&& \
 	eatmydata apt-get purge -y \
-	sysstat \
 	&& \
-	curl -L -o /usr/bin/tini https://github.com/krallin/tini/releases/download/v0.19.0/tini-static && \
-	chmod +x /usr/bin/tini && \
 	mkdir -p /etc/startup/ /etc/service/ && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
