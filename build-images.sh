@@ -3,14 +3,17 @@ set -eu
 
 IMAGES="
 base-ubuntu-24.04
+base-ubuntu-26.04
 base-jre-25
 base-jdk-25
 base-nodejs-14
+base-nodejs-24
 "
 
 DOCKER_TAG="${DOCKER_TAG:-master}"
 
 docker pull ubuntu:noble
+docker pull ubuntu:resolute
 
 # Build images.
 for image in $IMAGES; do

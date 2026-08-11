@@ -1,0 +1,93 @@
+#!/bin/sh
+set -eu
+
+# Wrapper for s6-svc that emulates runit sv behavior.
+
+SERVICES_DIR="/etc/service"
+TIMEOUT=${TIMEOUT:-5000}
+
+ACTION="${1:-}"
+SERVICE="${2:-}"
+
+if [ -z "${ACTION}" -o -z "${SERVICE}" ]; then
+	echo "usage: sv COMMAND SERVICE" >&2
+	exit 100
+fi
+
+case "${ACTION}" in
+	status)
+		OUTPUT="$(s6-svstat "${SERVICES_DIR}/${SERVICE}")"
+		CODE="$?"
+		echo "${OUTPUT}"
+
+		if [ "${CODE}" -ne "0" ]; then
+			exit ${CODE}
+		elif echo "${OUTPUT}" | grep -q '^up '; then
+			exit 0
+		elif echo "${OUTPUT}" | grep -q '^down '; then
+			exit 3
+		else
+			exit 4
+		fi
+		;;
+	up|start)
+		s6-svc -wu -T "${TIMEOUT}" -u "${SERVICES_DIR}/${SERVICE}"
+		;;
+	down|stop|shutdown)
+		s6-svc -wd -T "${TIMEOUT}" -d "${SERVICES_DIR}/${SERVICE}"
+		;;
+	force-stop|force-shutdown)
+		if ! s6-svc -wd -T "${TIMEOUT}" -d "${SERVICES_DIR}/${SERVICE}"; then
+			# Reached timeout when waiting for process to stop, kill it.
+			s6-svc -k "${SERVICES_DIR}/${SERVICE}"
+		fi
+		;;
+	restart|force-restart)
+		if ! s6-svc -wD -T "${TIMEOUT}" -d "${SERVICES_DIR}/${SERVICE}"; then
+			# Reached timeout when waiting for process to ready for a new start, kill it.
+			s6-svc -k "${SERVICES_DIR}/${SERVICE}" || true
+		fi
+		s6-svc -wu -T "${TIMEOUT}" -u "${SERVICES_DIR}/${SERVICE}"
+		;;
+	try-restart)
+		if [ "$(s6-svstat -o up "${SERVICES_DIR}/${SERVICE}")" = "true" ]; then
+			s6-svc -wr -T "${TIMEOUT}" -t "${SERVICES_DIR}/${SERVICE}"
+		fi
+		;;
+	once)
+		s6-svc -wu -T "${TIMEOUT}" -u0 "${SERVICES_DIR}/${SERVICE}"
+		;;
+	pause)
+		s6-svc -p "${SERVICES_DIR}/${SERVICE}"
+		;;
+	cont)
+		s6-svc -c "${SERVICES_DIR}/${SERVICE}"
+		;;
+	hup|reload|force-reload)
+		s6-svc -h "${SERVICES_DIR}/${SERVICE}"
+		;;
+	alarm)
+		s6-svc -a "${SERVICES_DIR}/${SERVICE}"
+		;;
+	interrupt)
+		s6-svc -i "${SERVICES_DIR}/${SERVICE}"
+		;;
+	quit)
+		s6-svc -q "${SERVICES_DIR}/${SERVICE}"
+		;;
+	1)
+		s6-svc -1 "${SERVICES_DIR}/${SERVICE}"
+		;;
+	2)
+		s6-svc -2 "${SERVICES_DIR}/${SERVICE}"
+		;;
+	term)
+		s6-svc -t "${SERVICES_DIR}/${SERVICE}"
+		;;
+	kill)
+		s6-svc -k "${SERVICES_DIR}/${SERVICE}"
+		;;
+	*)
+		echo "Unsupported action: ${ACTION}" >&2
+		;;
+esac
